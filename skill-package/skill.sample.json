@@ -9,7 +9,17 @@
             "hello",
             "help"
           ],
-          "name": "kitchenowl-skill",
+          "name": "kitchen owl",
+          "description": "This skill allows interactions with a Kitchen Owl shopping list"
+        },
+        "en-GB": {
+          "summary": "Self-hosted or public KitchenOwl skill",
+          "examplePhrases": [
+            "Alexa open Kitchen Owl",
+            "kitchenowl",
+            "help"
+          ],
+          "name": "kitchen owl",
           "description": "This skill allows interactions with a Kitchen Owl shopping list"
         }
       },

@@ -1,6 +1,5 @@
 import os
 import requests
-import logging
 from functools import cached_property
 
 # logging.basicConfig(level=logging.DEBUG)

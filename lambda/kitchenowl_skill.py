@@ -32,6 +32,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
         return ask_utils.is_request_type("LaunchRequest")(handler_input)
 
     def handle(self, handler_input):
+        global was_opened
         # type: (HandlerInput) -> Response
         speak_output = "This is Kitchen Owl. What would you like to do?"
         was_opened = True
@@ -49,29 +50,33 @@ class AddItemHandler(AbstractRequestHandler):
         return is_intent_name("AddItemIntent")(handler_input)
 
     def handle(self, handler_input):
+        global was_opened
         # type: (HandlerInput) -> Response
         item = get_slot_value(handler_input, "item")
+        item = item.capitalize() if item else item
 
         result = kitchenapi.add_item(item)
-        if result.status_code  == 200:
-            msg =  f"I have added {item}"
+        if result.status_code == 200:
+            msg = f"I have added {item}."
             if was_opened:
                 msg += " Anything else?"
         else:
             logger.error(f"Failed adding: {result.status_code}: {result.text}")
             msg = "Something went wrong."
 
-        rb =  handler_input.response_builder.speak(msg)
+        rb = handler_input.response_builder.speak(msg)
         if was_opened:
             rb = rb.ask("Anything else? ")
 
         return rb.response
+
 
 class ListItemsHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return ask_utils.is_intent_name("ListItemsIntent")(handler_input)
 
     def handle(self, handler_input):
+        global was_opened
         items = kitchenapi.list_items()
 
         num_items = len(items)
@@ -80,15 +85,16 @@ class ListItemsHandler(AbstractRequestHandler):
         elif num_items == 1:
             msg = f"There is one item on your list: {items[0]}"
         else:
-            item_list  = ", ".join(items[0:-1]) + ' and ' + items[-1]
+            item_list = ", ".join(items[0:-1]) + " and " + items[-1]
             msg = f"You have {len(items)} items on the list: {item_list}"
 
-        rb =  handler_input.response_builder.speak(msg)
+        rb = handler_input.response_builder.speak(msg)
 
         if was_opened:
             rb = rb.ask("Anything else? ")
 
         return rb.response
+
 
 # class ClearItemsHandler(AbstractRequestHandler):
 #     def can_handle(self, handler_input):
@@ -108,11 +114,13 @@ class ListItemsHandler(AbstractRequestHandler):
 #
 #         return rb.response
 
+
 class RemoveItemHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return ask_utils.is_intent_name("RemoveItemIntent")(handler_input)
 
     def handle(self, handler_input):
+        global was_opened
         item_name = get_slot_value(handler_input, "item")
 
         try:
@@ -124,12 +132,11 @@ class RemoveItemHandler(AbstractRequestHandler):
         except Exception:
             msg = "Something went wrong."
 
-        rb =  handler_input.response_builder.speak(msg)
+        rb = handler_input.response_builder.speak(msg)
         if was_opened:
             rb.ask("Anything else?")
 
         return rb.response
-
 
 
 class HelpIntentHandler(AbstractRequestHandler):
@@ -141,7 +148,7 @@ class HelpIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "You can say hello to me! How can I help?"
+        speak_output = "You can say 'add coca-cola', \"what's on my list or 'remove potatoes'"
 
         return (
             handler_input.response_builder.speak(speak_output)
@@ -151,13 +158,15 @@ class HelpIntentHandler(AbstractRequestHandler):
 
 
 class CancelOrStopIntentHandler(AbstractRequestHandler):
-    """Single handler for Cancel and Stop Intent."""
+    """Single handler for Cancel, No and Stop Intent."""
 
     def can_handle(self, handler_input):
         # type: (HandlerInput) -> bool
-        return ask_utils.is_intent_name("AMAZON.CancelIntent")(
-            handler_input
-        ) or ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input)
+        return (
+            ask_utils.is_intent_name("AMAZON.CancelIntent")(handler_input)
+            or ask_utils.is_intent_name("AMAZON.StopIntent")(handler_input)
+            or ask_utils.is_intent_name("AMAZON.NoIntent")(handler_input)
+        )
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
@@ -175,6 +184,7 @@ class SessionEndedRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
+        global was_opened
 
         was_opened = False
 
