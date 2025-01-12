@@ -1,0 +1,26 @@
+{
+  "manifest": {
+    "publishingInformation": {
+      "locales": {
+        "en-US": {
+          "summary": "Self-hosted or public KitchenOwl skill",
+          "examplePhrases": [
+            "Alexa open Kitchen Owl",
+            "hello",
+            "help"
+          ],
+          "name": "kitchenowl-skill",
+          "description": "This skill allows interactions with a Kitchen Owl shopping list"
+        }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Sample Testing Instructions.",
+      "category": "SHOPPING",
+      "distributionCountries": []
+    },
+    "apis": {
+      "custom": {}
+    },
+    "manifestVersion": "1.0"
+  }
+}
