@@ -1,3 +1,5 @@
 **/.env
 .venv
 .ask
+.ask/*
+skill-package/skill.json
