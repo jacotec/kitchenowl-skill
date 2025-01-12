@@ -3,8 +3,10 @@ import requests
 import logging
 from functools import cached_property
 
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 
+from dotenv import load_dotenv
+load_dotenv() 
 
 class KitchenOwlAPI:
     def __init__(self, household_id):
@@ -16,7 +18,7 @@ class KitchenOwlAPI:
             "Authorization": f"Bearer {token}",
         }
 
-    def _env_or_raise(self, name):
+    def _env_or_raise(self, name) -> str:
         result = os.getenv(name)
         if not result:
             raise Exception(f"Please set the {name} environment variable.")
@@ -29,13 +31,13 @@ class KitchenOwlAPI:
         return response.json()
 
     @cached_property
-    def list_id(self):
+    def list_id(self) -> str:
         if selected_id := os.getenv("KITCHENOWL_SHOPPING_LIST_ID"):
             return selected_id
         else:
             return self.shopping_lists()[0]["id"]
 
-    def list_items(self):
+    def list_items(self) -> list[str]:
         slist = self.shopping_lists()[0]
         return [i["name"] for i in slist["items"]]
 
@@ -44,7 +46,7 @@ class KitchenOwlAPI:
         data = {"name": item_name}
         response = requests.post(url, json=data, headers=self.DEFAULT_HEADERS)
         response.raise_for_status()
-        return response.json()
+        return response
 
     def remove_item(self, item_name):
         item_ids = [
@@ -59,5 +61,5 @@ class KitchenOwlAPI:
             response = requests.delete(
                 url, json={"item_id": item_id}, headers=self.DEFAULT_HEADERS
             )
-            responses.append(response.json())
+            responses.append(response)
         return responses

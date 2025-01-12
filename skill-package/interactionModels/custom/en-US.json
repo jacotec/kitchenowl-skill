@@ -32,10 +32,27 @@
                     ]
                 },
                 {
+                    "name": "RemoveItemIntent",
+                    "slots": [
+                        {
+                            "name": "item",
+                            "type": "AMAZON.Food"
+                        }
+                    ],
+                    "samples": [
+                        "delete {item}",
+                        "remove {item}",
+                        "drop {item}",
+                        "drop {item} from the list",
+                        "strike off {item} from the shopping list"
+                    ]
+                },
+                {
                     "name": "ListItemsIntent",
                     "samples": [
                         "what's on the list",
-                        "what's on my list"
+                        "what's on my list",
+                        "what's on my shopping list"
                     ]
                 },
                 {

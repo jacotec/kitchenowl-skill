@@ -14,7 +14,7 @@
       "skillInfrastructure": {
         "userConfig": {
           "runtime": "python3.9",
-          "handler": "hello_world.handler",
+          "handler": "kitchenowl_skill.handler",
           "awsRegion": "eu-west-1"
         },
         "type": "@ask-cli/lambda-deployer"
