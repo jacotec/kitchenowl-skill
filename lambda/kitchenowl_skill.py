@@ -125,7 +125,9 @@ class RemoveItemHandler(AbstractRequestHandler):
 
         try:
             result = kitchenapi.remove_item(item_name)
-            if all(r.status_code == 200 for r in result):
+            if len(result) == 0:
+                msg = f"Item {item_name} not found."
+            elif all(r.status_code == 200 for r in result):
                 msg = f"Removed {item_name} from the shopping list."
             else:
                 msg = f"Partial success removing {item_name} from the shopping list."

@@ -51,7 +51,7 @@ class KitchenOwlAPI:
         item_ids = [
             item["id"]
             for item in self.shopping_lists()[0]["items"]
-            if item["name"] == item_name
+            if item["name"] == item_name.capitalize()
         ]
 
         responses = []
