@@ -55,14 +55,20 @@ class AddItemHandler(AbstractRequestHandler):
         item = get_slot_value(handler_input, "item")
         item = item.capitalize() if item else item
 
-        result = kitchenapi.add_item(item)
-        if result.status_code == 200:
-            msg = f"I have added {item}."
+        check = kitchenapi.check_item(item)
+        if len(check) != 0:
+            msg = f"{item} ist already on your list."
             if was_opened:
                 msg += " Anything else?"
         else:
-            logger.error(f"Failed adding: {result.status_code}: {result.text}")
-            msg = "Something went wrong."
+            result = kitchenapi.add_item(item)
+            if result.status_code == 200:
+                msg = f"I have added {item}."
+                if was_opened:
+                    msg += " Anything else?"
+            else:
+                logger.error(f"Failed adding: {result.status_code}: {result.text}")
+                msg = "Something went wrong."
 
         rb = handler_input.response_builder.speak(msg)
         if was_opened:
@@ -122,15 +128,22 @@ class RemoveItemHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         global was_opened
         item_name = get_slot_value(handler_input, "item")
+        item_name = item_name.capitalize() if item_name else item_name
 
         try:
             result = kitchenapi.remove_item(item_name)
             if len(result) == 0:
                 msg = f"Item {item_name} not found."
+                if was_opened:
+                    msg += " Anything else?"
             elif all(r.status_code == 200 for r in result):
                 msg = f"Removed {item_name} from the shopping list."
+                if was_opened:
+                    msg += " Anything else?"
             else:
                 msg = f"Partial success removing {item_name} from the shopping list."
+                if was_opened:
+                    msg += " Anything else?"
         except Exception:
             msg = "Something went wrong."
 
