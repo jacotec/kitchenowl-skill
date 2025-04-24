@@ -1,0 +1,81 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "kitchen owl",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NoIntent",
+          "samples": []
+        },
+        {
+          "name": "AddItemIntent",
+          "slots": [
+            {
+              "name": "item",
+              "type": "AMAZON.Food"
+            }
+          ],
+          "samples": [
+            "{item}",
+            "{item}",
+            "mach {item} drauf",
+            "füge {item} hinzu",
+            "füge {item} zur liste hinzu",
+            "mach {item} auf meine einkaufsliste",
+            "setze {item} auf meine einkaufsliste"
+          ]
+        },
+        {
+          "name": "RemoveItemIntent",
+          "slots": [
+            {
+              "name": "item",
+              "type": "AMAZON.Food"
+            }
+          ],
+          "samples": [
+            "lösche {item}",
+            "entferne {item}",
+            "lasse {item} fallen",
+            "lasse {item} von der liste fallen",
+            "streiche {item} von der einkaufsliste"
+          ]
+        },
+        {
+          "name": "ListItemsIntent",
+          "samples": [
+            "was steht auf der liste",
+            "was steht auf meiner liste",
+            "was steht drauf"
+          ]
+        },
+        {
+          "name": "ClearCompletedItemsIntent",
+          "samples": [
+            "lösche alle fertigen",
+            "lösche alle erledigten",
+            "liste aufräumen",
+            "räum die liste auf"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        }
+      ],
+      "types": []
+    }
+  }
+}
