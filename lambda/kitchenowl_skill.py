@@ -161,7 +161,7 @@ class RemoveItemHandler(AbstractRequestHandler):
             if len(result) == 0:
                 msg = MSGS["ITEM_NOT_FOUND"].format(item_name)
                 if was_opened:
-                    msg += " Anything else?"
+                    msg += MSGS["ANYTHING"]
             elif all(r.status_code == 200 for r in result):
                 msg = MSGS["ITEM_REMOVED"].format(item_name)
                 if was_opened:
