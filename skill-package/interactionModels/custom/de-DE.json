@@ -13,7 +13,10 @@
         },
         {
           "name": "AMAZON.StopIntent",
-          "samples": []
+          "samples": [
+            "Danke",
+            "Tschüß"
+          ]
         },
         {
           "name": "AMAZON.NoIntent",
@@ -29,9 +32,11 @@
           ],
           "samples": [
             "{item}",
-            "{item}",
-            "mach {item} drauf",
+            "addiere {item}",
+            "setze {item}",
+            "setze {item} auf die liste",
             "füge {item} hinzu",
+            "mach {item} drauf",
             "füge {item} zur liste hinzu",
             "mach {item} auf meine einkaufsliste",
             "setze {item} auf meine einkaufsliste"
@@ -48,6 +53,10 @@
           "samples": [
             "lösche {item}",
             "entferne {item}",
+            "lösche {item} von der liste",
+            "entferne {item} von der liste",
+            "streiche {item}",
+            "streiche {item} von der liste",
             "lasse {item} fallen",
             "lasse {item} von der liste fallen",
             "streiche {item} von der einkaufsliste"
@@ -56,6 +65,9 @@
         {
           "name": "ListItemsIntent",
           "samples": [
+            "was ist auf der liste",
+            "was ist auf der einkaufsliste",
+            "lies meine liste vor",
             "was steht auf der liste",
             "was steht auf meiner liste",
             "was steht drauf"
@@ -64,8 +76,9 @@
         {
           "name": "ClearCompletedItemsIntent",
           "samples": [
-            "lösche alle fertigen",
             "lösche alle erledigten",
+            "lösche die liste",
+            "säubere die liste",
             "liste aufräumen",
             "räum die liste auf"
           ]
