@@ -55,9 +55,8 @@ class AddItemHandler(AbstractRequestHandler):
         item = get_slot_value(handler_input, "item")
         item = item.capitalize() if item else item
 
-        check = kitchenapi.check_item(item)
-        if len(check) != 0:
-            msg = f"{item} ist already on your list."
+        if kitchenapi.check_item(item):
+            msg = f"{item} is already on your list."
             if was_opened:
                 msg += " Anything else?"
         else:

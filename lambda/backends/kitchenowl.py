@@ -70,7 +70,4 @@ class KitchenOwlAPI:
             if item["name"].lower() == item_name.lower()
         ]
 
-        responses = []
-        for item_id in item_ids:
-            responses.append(item_id)
-        return responses
+        return item_ids
