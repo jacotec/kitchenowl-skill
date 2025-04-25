@@ -157,7 +157,8 @@ class RemoveItemHandler(AbstractRequestHandler):
         MSGS = load_locale_strings(get_locale(handler_input))
 
         try:
-            if kitchenapi.remove_item(item_name):
+            result = kitchenapi.remove_item(item_name)
+            if len(result) == 0:
                 msg = MSGS["ITEM_NOT_FOUND"].format(item_name)
                 if was_opened:
                     msg += " Anything else?"
