@@ -51,7 +51,7 @@ class KitchenOwlAPI:
         item_ids = [
             item["id"]
             for item in self.shopping_lists()[0]["items"]
-            if item["name"] == item_name.capitalize()
+            if item["name"].lower() == item_name.lower()
         ]
 
         responses = []
@@ -62,3 +62,12 @@ class KitchenOwlAPI:
             )
             responses.append(response)
         return responses
+
+    def check_item(self, item_name):
+        item_ids = [
+            item["id"]
+            for item in self.shopping_lists()[0]["items"]
+            if item["name"].lower() == item_name.lower()
+        ]
+
+        return item_ids
