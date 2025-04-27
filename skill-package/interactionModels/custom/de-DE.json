@@ -1,0 +1,91 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "kitchen owl",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": [
+            "Danke",
+            "Tschüß"
+          ]
+        },
+        {
+          "name": "AMAZON.NoIntent",
+          "samples": []
+        },
+        {
+          "name": "AddItemIntent",
+          "slots": [
+            {
+              "name": "item",
+              "type": "AMAZON.Food"
+            }
+          ],
+          "samples": [
+            "{item}",
+            "addiere {item}",
+            "setze {item}",
+            "setze {item} auf die liste",
+            "füge {item} hinzu",
+            "{item} hinzufügen",
+            "füge {item} zur liste hinzu",
+            "setze {item} auf meine einkaufsliste"
+          ]
+        },
+        {
+          "name": "RemoveItemIntent",
+          "slots": [
+            {
+              "name": "item",
+              "type": "AMAZON.Food"
+            }
+          ],
+          "samples": [
+            "lösche {item}",
+            "entferne {item}",
+            "lösche {item} von der liste",
+            "entferne {item} von der liste",
+            "streiche {item}",
+            "streiche {item} von der liste",
+            "streiche {item} von der einkaufsliste"
+          ]
+        },
+        {
+          "name": "ListItemsIntent",
+          "samples": [
+            "was ist auf der liste",
+            "was ist auf der einkaufsliste",
+            "lies meine liste vor",
+            "was steht auf der liste",
+            "was steht auf meiner liste",
+            "was steht drauf"
+          ]
+        },
+        {
+          "name": "ClearCompletedItemsIntent",
+          "samples": [
+            "lösche alle erledigten",
+            "lösche die liste",
+            "säubere die liste",
+            "liste aufräumen",
+            "räum die liste auf"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        }
+      ],
+      "types": []
+    }
+  }
+}

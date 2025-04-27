@@ -16,11 +16,34 @@ from ask_sdk_core.utils import is_intent_name, get_slot_value
 from ask_sdk_model import Response
 from backends.kitchenowl import KitchenOwlAPI
 import os
+import yaml
+from ask_sdk_core.utils import get_locale
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 kitchenapi = KitchenOwlAPI(os.getenv("KITCHENOWL_HOUSEHOLD_ID"))
 was_opened = False
+
+
+LOCALE_DIR = os.path.join(os.path.dirname(__file__), 'locales')
+
+def load_locale_strings(locale):
+    """Loads strings for the given locale, falls back to en-US if locale not found."""
+    locale_file_path = os.path.join(LOCALE_DIR, f'{locale}.yaml')
+    if not os.path.exists(locale_file_path):
+        # Fallback to default locale if the specific locale file doesn't exist
+        print(f"Warning: Locale file not found for {locale}. Falling back to en-US.")
+        locale_file_path = os.path.join(LOCALE_DIR, 'en-US.yaml') # Define your default locale
+
+    try:
+        with open(locale_file_path, 'r', encoding='utf-8') as f:
+            return yaml.safe_load(f)
+    except Exception as e:
+        print(f"Error loading locale file {locale_file_path}: {e}")
+        # In case of error, load the default locale's strings
+        default_locale_file_path = os.path.join(LOCALE_DIR, 'en-US.yaml')
+        with open(default_locale_file_path, 'r', encoding='utf-8') as f:
+             return yaml.safe_load(f)
 
 
 class LaunchRequestHandler(AbstractRequestHandler):
@@ -33,8 +56,9 @@ class LaunchRequestHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         global was_opened
+        MSGS = load_locale_strings(get_locale(handler_input))
         # type: (HandlerInput) -> Response
-        speak_output = "This is Kitchen Owl. What would you like to do?"
+        speak_output = MSGS['WELCOME']
         was_opened = True
 
         return (
@@ -51,27 +75,28 @@ class AddItemHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         global was_opened
+        MSGS = load_locale_strings(get_locale(handler_input))
         # type: (HandlerInput) -> Response
         item = get_slot_value(handler_input, "item")
         item = item.capitalize() if item else item
 
         if kitchenapi.check_item(item):
-            msg = f"{item} is already on your list."
+            msg = MSGS["ITEM_EXISTS"].format(item)
             if was_opened:
-                msg += " Anything else?"
+                msg += MSGS["ANYTHING"]
         else:
             result = kitchenapi.add_item(item)
             if result.status_code == 200:
-                msg = f"I have added {item}."
+                msg = MSGS["ITEM_ADDED"].format(item)
                 if was_opened:
-                    msg += " Anything else?"
+                    msg += MSGS["ANYTHING"]
             else:
-                logger.error(f"Failed adding: {result.status_code}: {result.text}")
-                msg = "Something went wrong."
+                logger.error(MSGS["FAILED_ADDING"].format(result.status_code, result.text))
+                msg = MSGS["WRONG"]
 
         rb = handler_input.response_builder.speak(msg)
         if was_opened:
-            rb = rb.ask("Anything else? ")
+            rb = rb.ask(MSGS["ANYTHING"])
 
         return rb.response
 
@@ -82,21 +107,22 @@ class ListItemsHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         global was_opened
+        MSGS = load_locale_strings(get_locale(handler_input))
         items = kitchenapi.list_items()
 
         num_items = len(items)
         if num_items == 0:
-            msg = "Your shopping list is empty."
+            msg = MSGS["LIST_EMPTY"]
         elif num_items == 1:
-            msg = f"There is one item on your list: {items[0]}"
+            msg = MSGS["LIST_ONEITEM"].format(items[0])
         else:
-            item_list = ", ".join(items[0:-1]) + " and " + items[-1]
-            msg = f"You have {len(items)} items on the list: {item_list}"
+            item_list = ", ".join(items[0:-1]) + MSGS["AND"] + items[-1]
+            msg = MSGS["LIST_ITEMS"].format(len(items), item_list)
 
         rb = handler_input.response_builder.speak(msg)
 
         if was_opened:
-            rb = rb.ask("Anything else? ")
+            rb = rb.ask(MSGS["ANYTHING"])
 
         return rb.response
 
@@ -106,16 +132,16 @@ class ListItemsHandler(AbstractRequestHandler):
 #         return ask_utils.is_intent_name("ClearItemsIntent")(handler_input)
 #
 #     def handle(self, handler_input):
-#
+#         MSGS = load_locale_strings(get_locale(handler_input))
 #         try:
 #             result = kitchenapi.clear_items()
-#             msg = "List cleared."
+#             msg = MSGS["LIST_CLEARED"]
 #         except Exception:
-#             msg = "Something went wrong."
+#             msg = MSGS["WRONG"]
 #
 #         rb =  handler_input.response_builder.speak(msg)
 #         if was_opened:
-#             rb.ask("Anything else?")
+#             rb.ask(MSGS["ANYTHING"])
 #
 #         return rb.response
 
@@ -128,27 +154,28 @@ class RemoveItemHandler(AbstractRequestHandler):
         global was_opened
         item_name = get_slot_value(handler_input, "item")
         item_name = item_name.capitalize() if item_name else item_name
+        MSGS = load_locale_strings(get_locale(handler_input))
 
         try:
             result = kitchenapi.remove_item(item_name)
             if len(result) == 0:
-                msg = f"Item {item_name} not found."
+                msg = MSGS["ITEM_NOT_FOUND"].format(item_name)
                 if was_opened:
-                    msg += " Anything else?"
+                    msg += MSGS["ANYTHING"]
             elif all(r.status_code == 200 for r in result):
-                msg = f"Removed {item_name} from the shopping list."
+                msg = MSGS["ITEM_REMOVED"].format(item_name)
                 if was_opened:
-                    msg += " Anything else?"
+                    msg += MSGS["ANYTHING"]
             else:
-                msg = f"Partial success removing {item_name} from the shopping list."
+                msg = MSGS["ITEM_REMOVED_PARTIAL"].format(item_name)
                 if was_opened:
-                    msg += " Anything else?"
+                    msg += MSGS["ANYTHING"]
         except Exception:
-            msg = "Something went wrong."
+            msg = MSGS["WRONG"]
 
         rb = handler_input.response_builder.speak(msg)
         if was_opened:
-            rb.ask("Anything else?")
+            rb.ask(MSGS["ANYTHING"])
 
         return rb.response
 
@@ -162,7 +189,8 @@ class HelpIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "You can say 'add coca-cola', \"what's on my list or 'remove potatoes'"
+        MSGS = load_locale_strings(get_locale(handler_input))
+        speak_output = MSGS["HELP_OPTIONS"]
 
         return (
             handler_input.response_builder.speak(speak_output)
@@ -184,7 +212,8 @@ class CancelOrStopIntentHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
-        speak_output = "Bye!"
+        MSGS = load_locale_strings(get_locale(handler_input))
+        speak_output = MSGS["BYE"]
 
         return handler_input.response_builder.speak(speak_output).response
 
@@ -242,7 +271,8 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         # type: (HandlerInput, Exception) -> Response
         logger.error(exception, exc_info=True)
 
-        speak_output = "Sorry, I had trouble doing what you asked. Please try again."
+        MSGS = load_locale_strings(get_locale(handler_input))
+        speak_output = MSGS["TROUBLE"]
 
         return (
             handler_input.response_builder.speak(speak_output)

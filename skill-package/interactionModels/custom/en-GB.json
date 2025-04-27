@@ -13,7 +13,11 @@
                 },
                 {
                     "name": "AMAZON.StopIntent",
-                    "samples": []
+                    "samples": [
+                        "that's all",
+                        "thank you",
+                        "thanks"
+                    ]
                 },
                 {
                     "name": "AMAZON.NoIntent",
