@@ -36,9 +36,8 @@
             "setze {item}",
             "setze {item} auf die liste",
             "füge {item} hinzu",
-            "mach {item} drauf",
+            "{item} hinzufügen",
             "füge {item} zur liste hinzu",
-            "mach {item} auf meine einkaufsliste",
             "setze {item} auf meine einkaufsliste"
           ]
         },
@@ -57,8 +56,6 @@
             "entferne {item} von der liste",
             "streiche {item}",
             "streiche {item} von der liste",
-            "lasse {item} fallen",
-            "lasse {item} von der liste fallen",
             "streiche {item} von der einkaufsliste"
           ]
         },
