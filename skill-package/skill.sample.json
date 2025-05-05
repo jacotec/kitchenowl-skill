@@ -2,6 +2,16 @@
   "manifest": {
     "publishingInformation": {
       "locales": {
+        "de-DE": {
+          "summary": "KitchenOwl-Skill",
+          "examplePhrases": [
+            "Alexa öffne Mampf",
+            "Mampf",
+            "help"
+          ],
+          "name": "Mampf",
+          "description": "Dieser Skill erlaubt Interaktion mit der Kitchen Owl Einkaufsliste"
+        },
         "en-US": {
           "summary": "Self-hosted or public KitchenOwl skill",
           "examplePhrases": [

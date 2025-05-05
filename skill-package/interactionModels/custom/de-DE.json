@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "kitchen owl",
+      "invocationName": "mampf",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
